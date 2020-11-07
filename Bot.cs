@@ -2,19 +2,14 @@
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
-using Newtonsoft.Json;
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace TestDiscord
 {
-    public class ConfigJson
+    public class BotConfig
     {
-        [JsonProperty("token")]
-        public string Token { get; private set; }
-        [JsonProperty("prefix")]
-        public string Prefix { get; private set; }
+        public const string token = "Your Bot Token Here";
+        public const string prefix = "?";
     }
 
     public class Bot
@@ -23,16 +18,9 @@ namespace TestDiscord
         public CommandsNextExtension CommandsNextExtension { get; private set; }
         public async Task RunAsyn()
         {
-            string json = string.Empty;
-            using (FileStream fs = File.OpenRead("config.json"))
-            using (StreamReader sr = new StreamReader(fs, new UTF8Encoding(false)))
-                json = await sr.ReadToEndAsync().ConfigureAwait(false);
-
-            ConfigJson configJson = JsonConvert.DeserializeObject<ConfigJson>(json);
-
             DiscordConfiguration config = new DiscordConfiguration
             {
-                Token = configJson.Token,
+                Token = BotConfig.token,
                 TokenType = TokenType.Bot,
                 AutoReconnect = true,
                 MinimumLogLevel = Microsoft.Extensions.Logging.LogLevel.Debug,
@@ -44,7 +32,7 @@ namespace TestDiscord
             {
                 StringPrefixes = new string[]
                 {
-                    configJson.Prefix
+                    BotConfig.prefix
                 },
                 EnableMentionPrefix = true,
                 EnableDms = false
@@ -59,7 +47,7 @@ namespace TestDiscord
 
     public class Commands : BaseCommandModule
     {
-
+        [Command("getallguildmemberlist")]
         public async Task GetAllGuildMemberList(CommandContext commandContext)
         {
             System.Collections.Generic.IReadOnlyDictionary<ulong, DiscordGuild> guilds = commandContext.Client.Guilds;
@@ -76,7 +64,7 @@ namespace TestDiscord
                 await commandContext.Channel.SendMessageAsync(memberList.TrimEnd(','));
             }
         }
-        [Command("getmemberlist")]
+        [Command("getguildmemberlist")]
         public async Task GetGuildMemberList(CommandContext commandContext)
         {
             DiscordGuild guild = commandContext.Member.Guild;
