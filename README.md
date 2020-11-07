@@ -1,5 +1,5 @@
 # DiscordBot
-This source for creating a new bot, It purpose was just one time use for myself. If you are intested feel free to take it.
+The source for creating a new bot with just one purpose "to get all discord member names". If you are intested feel free to take it.
 
 Bot Fuction
 	?getguildmemberlist bot will reply with displaynames of user in the server e.g. name1,name2 including bot name
